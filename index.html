@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Diario de Clase - Colegio Montano</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montanoBlue: '#1F3C88',
+                        montanoSecondary: '#3F72AF',
+                        montanoYellow: '#F2C94C',
+                        montanoBg: '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background-color: white;
+            }
+            .print-section {
+                display: block !important;
+                page-break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Barra de Navegación Superior -->
+    <header class="bg-montanoBlue text-white shadow-md sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-montanoYellow text-montanoBlue font-bold px-3 py-1.5 rounded-lg text-lg shadow">
+                    CM
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs text-blue-200">Planificación Diaria por Competencias • Modelo Presencial</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 mt-2 sm:mt-0">
+                <button onclick="resetData()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-sm font-medium transition flex items-center space-x-1" title="Restablecer datos originales">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>Reiniciar</span>
+                </button>
+                <button onclick="window.print()" class="bg-montanoSecondary hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium transition flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <span>Imprimir / PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full space-y-8">
+
+        <!-- 1. DATOS GENERALES DE LA CLASE -->
+        <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoBlue p-6">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2">
+                    <span class="bg-montanoBlue text-white text-xs px-2 py-1 rounded">1</span>
+                    <span>Datos Generales de la Clase</span>
+                </h2>
+                <span class="text-xs text-slate-500 italic">* Todos los campos son editables y se guardan automáticamente</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Colegio</label>
+                    <input type="text" id="d-colegio" value="Colegio Montano" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Modalidad</label>
+                    <input type="text" id="d-modalidad" value="Presencial" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Materia</label>
+                    <input type="text" id="d-materia" value="Medio Social" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Tema</label>
+                    <input type="text" id="d-tema" value="El parentesco" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Grado</label>
+                    <input type="text" id="d-grado" value="Segundo Primaria" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Unidad / No. Plan</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="d-unidad" value="Unidad 1" class="w-1/2 bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                        <input type="text" id="d-plan" value="Plan 3" class="w-1/2 bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Fecha</label>
+                    <input type="text" id="d-fecha" value="Febrero-Marzo 2027" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border">
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Docente</label>
+                    <input type="text" id="d-docente" value="Gloria Rodriguez" class="w-full bg-transparent font-medium focus:outline-none border-b border-dashed border-slate-300 focus:border-montanoBlue">
+                </div>
+            </div>
+            <div class="mt-4 flex items-center justify-between bg-amber-50 border border-montanoYellow p-3 rounded-lg text-sm text-amber-900">
+                <span class="font-semibold flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-montanoYellow fill-current" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/></svg>
+                    <span>Duración Total de la Sesión:</span>
+                </span>
+                <span class="font-bold text-montanoBlue text-base bg-white px-3 py-1 rounded shadow-sm">60 minutos exactos</span>
+            </div>
+        </section>
+
+        <!-- 2. COMPETENCIA Y LOGRO DE APRENDIZAJE -->
+        <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoSecondary p-6">
+            <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2 mb-4 border-b pb-3">
+                <span class="bg-montanoSecondary text-white text-xs px-2 py-1 rounded">2</span>
+                <span>Competencia y Logro de Aprendizaje</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-montanoBlue text-sm mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-1.5 text-montanoSecondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Competencia de Aprendizaje
+                    </h3>
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Analiza las relaciones de parentesco y los roles de los miembros de su núcleo familiar, valorando la importancia de la ayuda mutua, el respeto y la convivencia armónica en su entorno cotidiano.
+                    </p>
+                </div>
+                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                    <h3 class="font-bold text-montanoBlue text-sm mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-1.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Logro de Aprendizaje
+                    </h3>
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        El estudiante elabora y explica un mapa o árbol genealógico básico de su familia cercana y lejana, identificando correctamente los lazos de parentesco y el rol de cada integrante al finalizar la sesión.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 & 4. COMPETENCIAS CLAVE, BLANDAS Y HÁBITOS MONTANO -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 3. Competencias -->
+            <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoBlue p-6">
+                <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2 mb-4 border-b pb-3">
+                    <span class="bg-montanoBlue text-white text-xs px-2 py-1 rounded">3</span>
+                    <span>Competencias a Desarrollar</span>
+                </h2>
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <h4 class="font-semibold text-montanoSecondary mb-1.5">Competencias Clave</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 bg-slate-50 p-3 rounded-lg">
+                            <li><strong>Pensamiento crítico:</strong> Distingue entre parientes cercanos (padres, hermanos) y lejanos (tíos, primos) justificando sus vínculos.</li>
+                            <li><strong>Creatividad:</strong> Representa visualmente su red familiar mediante esquemas e ilustraciones originales.</li>
+                            <li><strong>Trabajo en equipo:</strong> Coopera en parejas para cotejar y armar un organizador gráfico familiar combinado.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-montanoSecondary mb-1.5">Competencias Blandas</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 bg-slate-50 p-3 rounded-lg">
+                            <li><strong>Inteligencia emocional:</strong> Expresa afecto y agradecimiento hacia los roles de apoyo dentro de su familia.</li>
+                            <li><strong>Comunicación:</strong> Comparte con claridad su árbol familiar ante sus compañeros durante la plenaria.</li>
+                            <li><strong>Flexibilidad:</strong> Acepta diferentes estructuras familiares representadas por sus pares con respeto.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Hábitos Montano -->
+            <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoYellow p-6">
+                <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2 mb-4 border-b pb-3">
+                    <span class="bg-montanoYellow text-montanoBlue font-extrabold text-xs px-2 py-1 rounded">4</span>
+                    <span>Hábitos del Modelo Formativo Montano</span>
+                </h2>
+                <div class="space-y-3 text-sm">
+                    <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-lg">
+                        <span class="font-bold text-montanoBlue">Hábito 2: Comenzar con un fin en mente</span>
+                        <p class="text-slate-600 text-xs mt-1">Se aplica al inicio de la sesión cuando los alumnos visualizan el objetivo de conocer y organizar su propia red familiar.</p>
+                    </div>
+                    <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-lg">
+                        <span class="font-bold text-montanoBlue">Hábito 5: Buscar primero entender, luego ser entendido</span>
+                        <p class="text-slate-600 text-xs mt-1">Practicado durante el trabajo cooperativo, escuchando activamente las descripciones familiares de los compañeros.</p>
+                    </div>
+                    <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-lg">
+                        <span class="font-bold text-montanoBlue">Hábito 6: Sinergizar</span>
+                        <p class="text-slate-600 text-xs mt-1">Evidenciado en la actividad colaborativa al unir ideas para estructurar un cuadro de parentesco completo y armonioso.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 5. SECUENCIA DIDÁCTICA OBLIGATORIA (60 MINUTOS) -->
+        <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoBlue p-6 print-section">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4 gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2">
+                        <span class="bg-montanoBlue text-white text-xs px-2 py-1 rounded">5</span>
+                        <span>Secuencia Didáctica Interactiva (60 Minutos Totales)</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Navega por los momentos didácticos utilizando las pestañas inferiores.</p>
+                </div>
+                <!-- Botones de Pestañas Interactivas (No print) -->
+                <div class="flex flex-wrap gap-2 no-print" id="tab-buttons">
+                    <button onclick="switchTab('im')" id="btn-im" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-montanoBlue text-white shadow transition">IM: Intro (10m)</button>
+                    <button onclick="switchTab('tp')" id="btn-tp" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">TP: Personal (20m)</button>
+                    <button onclick="switchTab('tc')" id="btn-tc" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">TC: Cooperativo (20m)</button>
+                    <button onclick="switchTab('p')" id="btn-p" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">P: Plenaria (10m)</button>
+                </div>
+            </div>
+
+            <!-- Contenedor de Momentos Didácticos -->
+            <div id="sequence-container">
+                <!-- IM -->
+                <div id="tab-im" class="space-y-4">
+                    <div class="flex items-center justify-between bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <span class="font-bold text-montanoBlue text-base">Momento 1: Introducción Motivante (IM)</span>
+                        <span class="bg-montanoBlue text-white text-xs font-bold px-2.5 py-1 rounded-full">10 Minutos</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Nombre de la Actividad</h4>
+                            <p class="text-slate-700">"El árbol de mi familia cercana y lejana"</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Propósito</h4>
+                            <p class="text-slate-700">Activar conocimientos previos y despertar curiosidad mediante una situación problema sobre los lazos familiares.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border text-sm space-y-2">
+                        <h4 class="font-semibold text-montanoSecondary">Instrucciones Paso a Paso (Distribución del tiempo)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li><strong>Minuto 01-03:</strong> Docente presenta una pequeña marioneta o ilustración de un niño confundido porque sus tíos y abuelos viven en otro lugar pero forman parte de su familia. Plantea la pregunta generadora: <em>¿Quiénes forman realmente nuestra familia y cómo nos relacionamos con ellos?</em></li>
+                            <li><strong>Minuto 04-07:</strong> Diálogo dirigido en plenaria corta. Los estudiantes comparten un recuerdo breve de algún familiar especial (cercano o lejano).</li>
+                            <li><strong>Minuto 08-10:</strong> Presentación del propósito de la clase y conexión con el Hábito Montano #2 (Comenzar con un fin en mente).</li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Recursos</span>
+                            <span class="text-slate-700 text-xs">Ilustración motivadora / Pizarra / Marioneta escolar.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Evidencia de Participación</span>
+                            <span class="text-slate-700 text-xs">Intervenciones orales activas y respuestas a la pregunta generadora.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Hábito Relacionado</span>
+                            <span class="text-slate-700 text-xs">Comenzar con un fin en mente.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TP -->
+                <div id="tab-tp" class="space-y-4 hidden print-section">
+                    <div class="flex items-center justify-between bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <span class="font-bold text-montanoBlue text-base">Momento 2: Trabajo Personal (TP)</span>
+                        <span class="bg-montanoBlue text-white text-xs font-bold px-2.5 py-1 rounded-full">20 Minutos</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Nombre de la Actividad</h4>
+                            <p class="text-slate-700">"Mi mapa de parentesco individual"</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Propósito</h4>
+                            <p class="text-slate-700">Construir y demostrar comprensión individual de las relaciones de parentesco cercano y lejano.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border text-sm space-y-2">
+                        <h4 class="font-semibold text-montanoSecondary">Instrucciones Paso a Paso (Distribución del tiempo)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li><strong>Minuto 11-15:</strong> Entrega de la hoja de trabajo con la plantilla de un esquema básico de árbol genealógico. El docente explica las categorías: padres, hermanos (núcleo cercano) y abuelos, tíos, primos (parentesco lejano/extenso).</li>
+                            <li><strong>Minuto 16-25:</strong> El alumno dibuja o escribe los nombres de sus familiares en el recuadro correspondiente según el grado de parentesco y añade una breve etiqueta con el rol principal de apoyo (ej. "Tío Juan - me ayuda con las tareas").</li>
+                            <li><strong>Minuto 26-30:</strong> Revisión personal y autoevaluación del esquema completado en el cuaderno.</li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Recursos</span>
+                            <span class="text-slate-700 text-xs">Hoja de trabajo impresa, lápiz, crayones y cuaderno.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Producto Esperado</span>
+                            <span class="text-slate-700 text-xs">Mapa de parentesco individual completado y pintado.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Criterio de Seguimiento</span>
+                            <span class="text-slate-700 text-xs">Clasificación correcta de parientes y pulcritud en el esquema.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TC -->
+                <div id="tab-tc" class="space-y-4 hidden print-section">
+                    <div class="flex items-center justify-between bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <span class="font-bold text-montanoBlue text-base">Momento 3: Trabajo Cooperativo (TC)</span>
+                        <span class="bg-montanoBlue text-white text-xs font-bold px-2.5 py-1 rounded-full">20 Minutos</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Nombre de la Actividad</h4>
+                            <p class="text-slate-700">"Construyendo nuestra gran red familiar"</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Propósito</h4>
+                            <p class="text-slate-700">Fomentar el intercambio de ideas, la escucha activa y el trabajo en equipo mediante la comparación de estructuras familiares.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border text-sm space-y-2">
+                        <h4 class="font-semibold text-montanoSecondary">Instrucciones y Roles (Distribución del tiempo)</h4>
+                        <p class="text-xs text-slate-600"><strong>Organización:</strong> Equipos de 3 integrantes asignados previamente por el docente.</p>
+                        <p class="text-xs text-slate-600"><strong>Roles asignados:</strong> 1. Líder de equipo (organiza turnos), 2. Relator (expone conclusiones), 3. Encargado de materiales.</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li><strong>Minuto 31-35:</strong> Los equipos se reúnen y cada integrante comparte su mapa de parentesco personal, encontrando similitudes y diferencias.</li>
+                            <li><strong>Minuto 36-45:</strong> En una cartulina pequeña o papelógrafo, elaboran un cuadro comparativo o esquema conjunto titulado "Nuestras Familias", clasificando los parientes en comunes (padres, hermanos) y externos (abuelos, tíos).</li>
+                            <li><strong>Minuto 46-50:</strong> Ensayo breve de la presentación del cartel para la plenaria aplicando el Hábito 5 (Buscar primero entender).</li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Recursos</span>
+                            <span class="text-slate-700 text-xs">Papelógrafo, marcadores de colores, tarjetas adhesivas.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Producto Final</span>
+                            <span class="text-slate-700 text-xs">Organizador gráfico colaborativo de red familiar.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Hábito Relacionado</span>
+                            <span class="text-slate-700 text-xs">Sinergizar & Buscar primero entender.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- P -->
+                <div id="tab-p" class="space-y-4 hidden print-section">
+                    <div class="flex items-center justify-between bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <span class="font-bold text-montanoBlue text-base">Momento 4: Plenaria (P)</span>
+                        <span class="bg-montanoBlue text-white text-xs font-bold px-2.5 py-1 rounded-full">10 Minutos</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Nombre de la Actividad</h4>
+                            <p class="text-slate-700">"Socialización y Ticket de Salida"</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <h4 class="font-semibold text-montanoSecondary mb-1">Propósito</h4>
+                            <p class="text-slate-700">Socializar resultados, formular conclusiones colectivas y verificar el logro de aprendizaje mediante evaluación formativa de cierre.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border text-sm space-y-2">
+                        <h4 class="font-semibold text-montanoSecondary">Instrucciones Paso a Paso (Distribución del tiempo)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li><strong>Minuto 51-55:</strong> Dos equipos relatores exponen brevemente sus conclusiones sobre los lazos familiares y cómo nos apoyamos mutuamente.</li>
+                            <li><strong>Minuto 56-58:</strong> Docente consolida los conceptos clave: parentesco cercano (nuclear) y lejano (extenso), destacando el respeto y la empatía.</li>
+                            <li><strong>Minuto 59-60:</strong> Aplicación del <strong>Ticket de Salida</strong>: cada estudiante responde en un papelito o en su cuaderno: <em>"Menciona un pariente cercano y un pariente lejano, y una forma en que te ayudan"</em>.</li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Recursos</span>
+                            <span class="text-slate-700 text-xs">Pizarra, papelitos de ticket de salida, carteles elaborados.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Evidencia Final</span>
+                            <span class="text-slate-700 text-xs">Ticket de salida completado por cada estudiante.</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border">
+                            <span class="font-semibold text-montanoSecondary block mb-1">Evaluación de Salida</span>
+                            <span class="text-slate-700 text-xs">Verificación rápida de conceptos clave alcanzados.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. RECURSOS DIDÁCTICOS -->
+        <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoSecondary p-6 print-section">
+            <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2 mb-4 border-b pb-3">
+                <span class="bg-montanoSecondary text-white text-xs px-2 py-1 rounded">6</span>
+                <span>Recursos Didácticos (Presenciales)</span>
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-sm">
+                <div class="bg-slate-50 p-3 rounded-lg border text-center">
+                    <span class="block font-semibold text-montanoBlue mb-1">Cuaderno</span>
+                    <span class="text-xs text-slate-600">De trabajo de Medio Social</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border text-center">
+                    <span class="block font-semibold text-montanoBlue mb-1">Hojas de Trabajo</span>
+                    <span class="text-xs text-slate-600">Plantilla de árbol genealógico</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border text-center">
+                    <span class="block font-semibold text-montanoBlue mb-1">Papelógrafos</span>
+                    <span class="text-xs text-slate-600">Para trabajo cooperativo</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border text-center">
+                    <span class="block font-semibold text-montanoBlue mb-1">Marcadores</span>
+                    <span class="text-xs text-slate-600">De colores y pizarra</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border text-center">
+                    <span class="block font-semibold text-montanoBlue mb-1">Crayones</span>
+                    <span class="text-xs text-slate-600">Y lápices personales</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border text-center">
+                    <span class="block font-semibold text-montanoBlue mb-1">Marioneta / Apoyo</span>
+                    <span class="text-xs text-slate-600">Para introducción motivante</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7 & 8. EVALUACIÓN DEL APRENDIZAJE E INSTRUMENTO (LISTA DE COTEJO INTERACTIVA) -->
+        <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoBlue p-6 print-section">
+            <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2 mb-4 border-b pb-3">
+                <span class="bg-montanoBlue text-white text-xs px-2 py-1 rounded">7</span>
+                <span>Evaluación del Aprendizaje e Instrumento (Lista de Cotejo Interactiva)</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-sm">
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-montanoBlue mb-1">Evaluación Inicial</h3>
+                    <p class="text-xs text-slate-700">Diagnóstico mediante preguntas generadoras y participación oral durante la Introducción Motivante (IM).</p>
+                </div>
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-montanoBlue mb-1">Evaluación Formativa</h3>
+                    <p class="text-xs text-slate-700">Acompañamiento docente, observación de roles y revisión de avances en el Trabajo Personal (TP) y Cooperativo (TC).</p>
+                </div>
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-montanoBlue mb-1">Evaluación Sumativa</h3>
+                    <p class="text-xs text-slate-700">Lista de cotejo aplicada al producto final (mapa de parentesco y organizador gráfico) y ticket de salida.</p>
+                </div>
+            </div>
+
+            <!-- Tabla Interactiva de Lista de Cotejo -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-montanoBlue text-white">
+                            <th class="p-3 rounded-tl-lg">Criterios de Evaluación</th>
+                            <th class="p-3 text-center w-28">Sí (2 pts)</th>
+                            <th class="p-3 text-center w-28">En Proceso (1 pt)</th>
+                            <th class="p-3 text-center w-28 rounded-tr-lg">No (0 pts)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-3 text-slate-700">1. Identifica y diferencia correctamente los parientes cercanos (núcleo) y lejanos (extensos).</td>
+                            <td class="text-center p-3"><input type="radio" name="crit1" value="2" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit1" value="1" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit1" value="0" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue" checked></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-3 text-slate-700">2. Elabora el mapa de parentesco individual con orden, claridad y limpieza.</td>
+                            <td class="text-center p-3"><input type="radio" name="crit2" value="2" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit2" value="1" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit2" value="0" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue" checked></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-3 text-slate-700">3. Colabora activamente con su equipo respetando roles y opiniones de sus compañeros.</td>
+                            <td class="text-center p-3"><input type="radio" name="crit3" value="2" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit3" value="1" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit3" value="0" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue" checked></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-3 text-slate-700">4. Explica con claridad la importancia del apoyo y la convivencia familiar en el ticket de salida.</td>
+                            <td class="text-center p-3"><input type="radio" name="crit4" value="2" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit4" value="1" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue"></td>
+                            <td class="text-center p-3"><input type="radio" name="crit4" value="0" onchange="calculateScore()" class="w-4 h-4 text-montanoBlue focus:ring-montanoBlue" checked></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resultado de la Puntuación -->
+            <div class="mt-4 flex flex-col sm:flex-row justify-between items-center bg-slate-50 border p-4 rounded-xl gap-2">
+                <span class="font-semibold text-slate-700">Puntuación Total Obtenida (Máx. 8 Puntos):</span>
+                <span id="score-display" class="bg-montanoYellow text-montanoBlue font-extrabold text-lg px-4 py-1.5 rounded-lg shadow-sm">0 / 8 Puntos</span>
+            </div>
+        </section>
+
+        <!-- 9. OBSERVACIONES Y REFLEXIÓN DOCENTE -->
+        <section class="bg-white rounded-xl shadow-md border-t-4 border-montanoYellow p-6 print-section">
+            <h2 class="text-lg font-bold text-montanoBlue flex items-center space-x-2 mb-4 border-b pb-3">
+                <span class="bg-montanoYellow text-montanoBlue font-extrabold text-xs px-2 py-1 rounded">8</span>
+                <span>Observaciones y Reflexión Docente</span>
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Notas sobre el desarrollo de la clase y participación estudiantil:</label>
+                    <textarea id="obs-desarrollo" rows="3" class="w-full bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-montanoBlue" placeholder="Escriba aquí sus observaciones durante la sesión..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-montanoSecondary mb-1">Oportunidades de mejora y adecuaciones para futuras sesiones:</label>
+                    <textarea id="obs-mejora" rows="3" class="w-full bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-montanoBlue" placeholder="Escriba aquí áreas de mejora o ajustes necesarios..."></textarea>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Institucional -->
+    <footer class="bg-slate-900 text-slate-400 py-6 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-sm font-medium text-white">Colegio Montano • Excelencia Educativa y Formación Integral</p>
+            <p class="text-xs">Sistema de Planificación Diaria Interactiva por Competencias © 2027</p>
+        </div>
+    </footer>
+
+    <!-- Script de Interactividad y LocalStorage -->
+    <script>
+        // Navegación por Pestañas
+        function switchTab(tabId) {
+            const tabs = ['im', 'tp', 'tc', 'p'];
+            tabs.forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                    btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-montanoBlue text-white shadow transition";
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                }
+            });
+        }
+
+        // Calculadora de Puntuación de Lista de Cotejo
+        function calculateScore() {
+            let total = 0;
+            for (let i = 1; i <= 4; i++) {
+                const radios = document.getElementsByName('crit' + i);
+                for (let r of radios) {
+                    if (r.checked) {
+                        total += parseInt(r.value);
+                    }
+                }
+            }
+            document.getElementById('score-display').innerText = total + " / 8 Puntos";
+            saveToLocalStorage();
+        }
+
+        // Almacenamiento Local (LocalStorage)
+        const inputIds = ['d-colegio', 'd-modalidad', 'd-materia', 'd-tema', 'd-grado', 'd-unidad', 'd-plan', 'd-fecha', 'd-docente', 'obs-desarrollo', 'obs-mejora'];
+
+        function saveToLocalStorage() {
+            const data = {};
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+
+            // Guardar radios de cotejo
+            const cotejo = {};
+            for (let i = 1; i <= 4; i++) {
+                const radios = document.getElementsByName('crit' + i);
+                for (let r of radios) {
+                    if (r.checked) cotejo['crit' + i] = r.value;
+                }
+            }
+            data['cotejo'] = cotejo;
+
+            localStorage.setItem('montano_plan_3_data', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('montano_plan_3_data');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    inputIds.forEach(id => {
+                        if (data[id] !== undefined && document.getElementById(id)) {
+                            document.getElementById(id).value = data[id];
+                        }
+                    });
+                    if (data['cotejo']) {
+                        for (let i = 1; i <= 4; i++) {
+                            const val = data['cotejo']['crit' + i];
+                            if (val !== undefined) {
+                                const radios = document.getElementsByName('crit' + i);
+                                for (let r of radios) {
+                                    if (r.value === val) r.checked = true;
+                                }
+                            }
+                        }
+                        calculateScore();
+                    }
+                } catch (e) {
+                    console.error("Error al cargar almacenamiento local", e);
+                }
+            }
+        }
+
+        // Reiniciar datos originales con confirmación
+        function resetData() {
+            if (confirm("¿Está seguro de restablecer todos los campos y calificaciones a sus valores originales?")) {
+                localStorage.removeItem('montano_plan_3_data');
+                location.reload();
+            }
+        }
+
+        // Event Listeners para guardado automático en tiempo real
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', saveToLocalStorage);
+                }
+            });
+        });
+
+        // Asegurar visualización completa en impresión
+        window.addEventListener('beforeprint', () => {
+            const tabs = ['im', 'tp', 'tc', 'p'];
+            tabs.forEach(t => {
+                document.getElementById('tab-' + t).classList.remove('hidden');
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Restaurar pestaña activa (por defecto IM o mantener)
+            switchTab('im');
+        });
+    </script>
+</body>
+</html>
